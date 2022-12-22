@@ -7,16 +7,20 @@ import { Skeleton } from '../components/PizzaBlock/Skeleton';
 import Pagination from "../components/Pagination";
 import { SearchContext } from "../App";
 
+import { useSelector, useDispatch } from 'react-redux'
+import { setCategoryId } from "../redux/slices/filterSlice";
+
 export const Home = () => {
+    const { sortType, categoryId } = useSelector((state) => state.filter)
+    const dispatch = useDispatch()
+
+    const changeCategoryId = (id) => {
+        dispatch(setCategoryId(id))
+    }
 
     const {searchValue} = React.useContext(SearchContext)
     const [items, setItems] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true);
-    const [categoryType, setCategoryType] = React.useState(0);
-    const [sortType, setSortType] = React.useState({
-        name: 'популярности',
-        sort: 'rating'
-    });
     const [currentPage, setCurrentPage] = React.useState(1);
 
     React.useEffect(() => {
@@ -24,7 +28,7 @@ export const Home = () => {
 
         const sortBy = sortType.sort.replace('-', '');
         const order = sortType.sort.includes('-') ? 'asc' : 'desc';
-        const category = categoryType > 0 ? `category=${categoryType}` : '';
+        const category = categoryId > 0 ? `category=${categoryId}` : '';
         const search = searchValue ? `${searchValue}` : '';
 
         fetch(
@@ -38,7 +42,7 @@ export const Home = () => {
             setIsLoading(false);
         });
         window.scrollTo(0, 0);
-    }, [categoryType, sortType, searchValue, currentPage]);
+    }, [categoryId, sortType, searchValue, currentPage]);
 
     const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
@@ -47,8 +51,8 @@ export const Home = () => {
     return (
     <div className="container">
         <div className="content__top">
-            <Categories value={categoryType} onClickCategory={(i) =>setCategoryType(i)} />
-            <Sort value={sortType} onClickSort={(i) =>setSortType(i)} />
+            <Categories value={categoryId} onClickCategory={(id) => changeCategoryId(id)} />
+            <Sort />
         </div>
         <h2 className="content__title">Bce пиццы</h2>
         <div className="content__items">
