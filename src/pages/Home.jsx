@@ -32,7 +32,7 @@ export const Home = () => {
         dispatch(setCurrentPage(num))
     }
 
-    const fetchPizzas = () => {
+    const fetchPizzas = async () => {
         setIsLoading(true);
 
         const sortBy = sortType.sort.replace('-', '');
@@ -40,11 +40,26 @@ export const Home = () => {
         const category = categoryId > 0 ? `${categoryId}` : '';
         const search = searchValue ? `${searchValue}` : '';
 
-        axios.get(`https://639d8cce1ec9c6657baca8b6.mockapi.io/items?page=${currentPage}&limit=4&category=${category}&sortBy=${sortBy}&order=${order}&search=${search}`)
+        {/*await axios.get(`https://639d8cce1ec9c6657baca8b6.mockapi.io/items?page=${currentPage}&limit=4&category=${category}&sortBy=${sortBy}&order=${order}&search=${search}`)
         .then(res => {
             setItems(res.data);
             setIsLoading(false);
+        .catch((err) => {
+            setIsLoading(false);
         });
+        });*/}
+
+
+        try {
+            const res = await axios.get(`https://639d8cce1ec9c6657baca8b6.mockapi.io/items?page=${currentPage}&limit=4&category=${category}&sortBy=${sortBy}&order=${order}&search=${search}`);
+            setItems(res.data);
+        } catch (error) {
+            console.log('ERROR', error);
+        } finally {
+            setIsLoading(false);
+        }
+
+        
     }
 
     React.useEffect(() => {
