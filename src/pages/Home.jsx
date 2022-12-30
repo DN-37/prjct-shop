@@ -11,7 +11,7 @@ import { fetchPizzas, selectPizzas } from "../redux/slices/pizzaSlice";
 
 
 import qs from 'qs';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 
 export const Home = () => {
@@ -86,7 +86,7 @@ export const Home = () => {
         isSearch.current = false
     }, [categoryId, sortType, searchValue, currentPage]);
 
-    const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+    const pizzas = items.map((obj) => <Link to={`/pizza/${obj.id}`}><PizzaBlock key={obj.id} {...obj} /></Link>);
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
 
     return (
