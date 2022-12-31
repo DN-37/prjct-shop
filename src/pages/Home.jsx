@@ -6,18 +6,18 @@ import { Skeleton } from '../components/PizzaBlock/Skeleton';
 import Pagination from "../components/Pagination";
 
 import { useSelector, useDispatch } from 'react-redux'
-import { setCategoryId, setCurrentPage, setFilters } from "../redux/slices/filterSlice";
-import { fetchPizzas } from "../redux/slices/pizzaSlice";
+import { selectFilter, setCategoryId, setCurrentPage, setFilters } from "../redux/slices/filterSlice";
+import { fetchPizzas, selectPizzas } from "../redux/slices/pizzaSlice";
 
 
 import qs from 'qs';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 
 export const Home = () => {
-    const { sortType, categoryId, currentPage, searchValue } = useSelector((state) => state.filter)
+    const { sortType, categoryId, currentPage, searchValue } = useSelector(selectFilter);
 
-    const { items, status } = useSelector((state) => state.pizza)
+    const { items, status } = useSelector(selectPizzas)
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -38,13 +38,12 @@ export const Home = () => {
         const sortBy = sortType.sort.replace('-', '');
         const order = sortType.sort.includes('-') ? 'asc' : 'desc';
         const category = categoryId > 0 ? `${categoryId}` : '';
-        const search = searchValue ? `${searchValue}` : '';
 
         dispatch(fetchPizzas({
             sortBy,
             order,
             category,
-            search,
+            searchValue,
             currentPage,
         }))
 
@@ -57,13 +56,12 @@ export const Home = () => {
                 sort: sortType.sort,
                 categoryId,
                 currentPage,
-                searchValue,
             });
 
             navigate(`?${queryString}`)
         }
         isMounted.current = true;
-    }, [categoryId, sortType, currentPage, searchValue, navigate])
+    }, [categoryId, sortType, currentPage, navigate])
 
     React.useEffect(() => {
         if (window.location.search) {
@@ -88,7 +86,7 @@ export const Home = () => {
         isSearch.current = false
     }, [categoryId, sortType, searchValue, currentPage]);
 
-    const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+    const pizzas = items.map((obj) => <Link to={`/pizza/${obj.id}`}><PizzaBlock key={obj.id} {...obj} /></Link>);
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
 
     return (
