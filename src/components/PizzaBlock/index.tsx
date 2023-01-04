@@ -4,7 +4,16 @@ import { addItem, selectCartItem } from '../../redux/slices/cartSlice'
 
 const typeNames = ['тонкое', 'традиционное'];
 
-function PizzaBlock({ id, title, price, imageUrl, sizes, types}) {
+type PizzaBlockProps = { 
+  id: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+  sizes: number[];
+  types: number[];
+}
+
+const PizzaBlock: React.FC<PizzaBlockProps> = ({ id, title, price, imageUrl, sizes, types }) => {
   const [pizzaCount, setPizzaCount] = useState(0);  
 
   const onClickPizzaCount = () => {

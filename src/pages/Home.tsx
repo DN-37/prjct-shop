@@ -14,7 +14,7 @@ import qs from 'qs';
 import { useNavigate, Link } from "react-router-dom";
 
 
-export const Home = () => {
+export const Home: React.FC = () => {
     const { sortType, categoryId, currentPage, searchValue } = useSelector(selectFilter);
 
     const { items, status } = useSelector(selectPizzas)
@@ -25,11 +25,11 @@ export const Home = () => {
     const isMounted = React.useRef(false);
 
 
-    const changeCategoryId = (id) => {
+    const changeCategoryId = (id: number) => {
         dispatch(setCategoryId(id))
     }
 
-    const changeNumber = (num) => {
+    const changeNumber = (num: number) => {
         dispatch(setCurrentPage(num))
     }
 
@@ -39,7 +39,9 @@ export const Home = () => {
         const order = sortType.sort.includes('-') ? 'asc' : 'desc';
         const category = categoryId > 0 ? `${categoryId}` : '';
 
-        dispatch(fetchPizzas({
+        dispatch(
+            // @ts-ignore
+            fetchPizzas({
             sortBy,
             order,
             category,
@@ -86,13 +88,13 @@ export const Home = () => {
         isSearch.current = false
     }, [categoryId, sortType, searchValue, currentPage]);
 
-    const pizzas = items.map((obj) => <Link to={`/pizza/${obj.id}`}><PizzaBlock key={obj.id} {...obj} /></Link>);
+    const pizzas = items.map((obj: any) => <Link to={`/pizza/${obj.id}`}><PizzaBlock key={obj.id} {...obj} /></Link>);
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
 
     return (
     <div className="container">
         <div className="content__top">
-            <Categories value={categoryId} onClickCategory={(id) => changeCategoryId(id)} />
+            <Categories value={categoryId} onClickCategory={(id: any) => changeCategoryId(id)} />
             <Sort />
         </div>
         <h2 className="content__title">Bce пиццы</h2>
@@ -113,7 +115,7 @@ export const Home = () => {
             </div> )
         }
         
-        <Pagination onChangePage={changeNumber}/>
+        <Pagination currentPage={currentPage} onChangePage={changeNumber}/>
     </div>
     )
 }
