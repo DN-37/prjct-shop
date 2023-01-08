@@ -19,7 +19,7 @@ type CartItemProps = {
         dispatch(
           addItem({
             id,
-          }),
+          } as CartItemProps),
         );
       };
     
