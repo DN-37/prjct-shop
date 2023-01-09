@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSortType, setSort, SortPropertyEnum } from "../redux/slices/filterSlice";
+import { selectSortType, setSort, Sort, SortPropertyEnum } from "../redux/slices/filterSlice";
 
 type sortItem = {
   name: string;
@@ -9,6 +9,10 @@ type sortItem = {
 
 type PopupClick = MouseEvent & {
   path: Node[];
+}
+
+type SortPopupProps = {
+  value: Sort;
 }
 
 export const list: sortItem[] = [
@@ -20,7 +24,7 @@ export const list: sortItem[] = [
   { name: 'алфавиту (по возрастанию)', sort: SortPropertyEnum.TITLE_ASC }
 ];
 
-function Sort() {
+const SortPopup: React.FC<SortPopupProps> =  ({ value }) => {
   const sortType = useSelector(selectSortType);
   const dispatch = useDispatch();
   const sortRef = React.useRef<HTMLDivElement>(null)
@@ -61,7 +65,7 @@ function Sort() {
             />
           </svg>
           <b>Сортировка по:</b>
-          <span onClick={() => setOpen(!open)}>{sortType.name}</span>
+          <span onClick={() => setOpen(!open)}>{value.name}</span>
         </div>
         {open && <div className="sort__popup">
           <ul>
@@ -69,7 +73,7 @@ function Sort() {
               <li
                 key={i}
                 onClick={() => onClickListItem(obj)}
-                className={sortType.sort === obj.sort ? 'active' : ''}>
+                className={value.sort === obj.sort ? 'active' : ''}>
                 {obj.name}
               </li>
             ))}
@@ -79,4 +83,4 @@ function Sort() {
     );
   }
 
-  export default Sort
+  export default SortPopup;
