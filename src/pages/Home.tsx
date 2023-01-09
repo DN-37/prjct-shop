@@ -1,6 +1,6 @@
 import React from "react";
 import Categories from '../components/Categories';
-import Sort, { list } from '../components/Sort';
+import SortPopup, { list } from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
 import { Skeleton } from '../components/PizzaBlock/Skeleton';
 import Pagination from "../components/Pagination";
@@ -27,9 +27,9 @@ export const Home: React.FC = () => {
     const isMounted = React.useRef(false);
 
 
-    const changeCategoryId = (id: number) => {
-        dispatch(setCategoryId(id))
-    }
+    const changeCategoryId = React.useCallback((id: number) => {
+        dispatch(setCategoryId(id));
+    }, []);
 
     const changeNumber = (num: number) => {
         dispatch(setCurrentPage(num))
@@ -100,7 +100,7 @@ export const Home: React.FC = () => {
     <div className="container">
         <div className="content__top">
             <Categories value={categoryId} onClickCategory={(id: any) => changeCategoryId(id)} />
-            <Sort />
+            <SortPopup value={sortType} />
         </div>
         <h2 className="content__title">Bce пиццы</h2>
         {
