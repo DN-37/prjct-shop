@@ -1,3 +1,6 @@
+<h3>Посмотреть сайт можно по ссылке ниже:</h3>
+<a href="https://online-store-shop-site.netlify.app/" target="_blank">Интернет-магазин
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
